@@ -1,6 +1,10 @@
 from openai import OpenAI
+import openai
 import streamlit as st
 import time
+
+
+#初始化客户端
 def text_correction(ai_prompt,user_input,api_key):
     client = OpenAI(
         # 文本纠错助手的 API KEY 将由用户提供，下行可替换为：api_key="sk-xxx"
@@ -13,48 +17,82 @@ def text_correction(ai_prompt,user_input,api_key):
     {'role': 'user', 'content': user_input}
      ], )
     return response.choices[0].message.content
+
+
+def is_openai_api_available(api_key: str) -> bool:
+    """
+    检查 OpenAI API 是否存在并且可用。
+
+    :param api_key: OpenAI API 密钥
+    :return: 如果 API 可用返回 True，否则返回 False
+    """
+    try:
+        # 设置 API 密钥
+        openai.api_key = api_key
+        # 测试调用一个简单的 API 方法，例如模型列表
+        openai.Model.list()
+        # 如果调用成功，返回 True
+        return True
+    except openai.APIError:
+        # 认证失败，可能是密钥错误
+        print("Authentication failed. Please check your API key.")
+        return False
+    except Exception as e:
+        # 捕获其他未知错误
+        print(f"An unexpected error occurred: {e}")
+        return False
+
+
 AI_prompt = """
     请你充当一个文本纠错助手，将所得到的文本进行纠错，分别指出文本中的语法错误，
     拼写错误，标点错误以及对应的修改建议,
     以下为输出格式:
     *语法错误:<语法错误的部分><修改建议>
-    *拼写错误:<拼写错误><修改建议>
-    *标点错误:<标点错误><修改建议>
+    *拼写错误:<拼写错误的部分><修改建议>
+    *标点错误:<标点错误的部分><修改建议>
+    修改后的文本答案:<修改后的文本>
     """
 st.set_page_config(
-    page_title="猜猜这是谁的网站",  # 标签页的名称
-    page_icon="🌟"         # 标签页的图标，可以是 emoji 或 URL
+    page_title="小鸢的文本纠错助手",  # 标签页的名称
+    page_icon="🐲"         # 标签页的图标，可以是 emoji 或 URL🐲"🌟"
 )
 #添加一个标题
-st.title('🌈文本纠错助手')
+st.title('🌟文本纠错助手')
 
 #添加水平分割线
 st.divider()
 #文本输入
 user_input_content = st.text_area("请输入你需要进行纠错的文本")
 st.divider()
-user_api = st.text_input("请输入你的api_key",type = 'password')
-# 可以循环使用
+with st.sidebar:
+    st.write("用户管理")
+    user_api = st.text_input("请输入你的api_key",type="password")
+# 可以循环使用,暂时没用到？
 count = 0
+num = str(count)
+
 flag = 0
 
-num = str(count)
+
 if st.button("提交",key=num) :
     if not user_input_content.strip():  # 去掉首尾空格后判断
         st.write("文本输入不能为空，请输入内容！")
         count+=1
     if not user_api.strip():
-        st.write("api输入不能为空，请输入内容!")
+        st.write("api_key输入不能空,请输入内容!")
         count+=1
-    if user_input_content.strip() and  user_api.strip():
-        st.write("提交成功")
+    if user_input_content.strip() and user_api.strip():
         count += 1
-        flag = 1
+        if is_openai_api_available(user_api):
+            flag = 1
+            st.write("提交成功")
+        else:
+            st.write("api_key 不正确，请重新输入")
 else:
     count+=1
 if flag :
     ai_response = text_correction(AI_prompt,user_input_content,user_api)
-    'ai正在努力中✈️'
+    '小千正在努力中✈️'
     # 添加一个占位符
     latest_iteration = st.empty()
     bar = st.progress(0)
@@ -65,5 +103,6 @@ if flag :
         time.sleep(0.01)
     '...现在我们完成了！'
     st.divider()
-    st.text_area("结果输出",ai_response, height=100)
+    st.text_area("🐲:结果输出",ai_response,height=200)
     flag = 0
+

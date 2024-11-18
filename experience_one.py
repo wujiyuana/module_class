@@ -1,4 +1,3 @@
-from networkx.generators.small import heawood_graph
 from openai import OpenAI
 import openai
 import streamlit as st

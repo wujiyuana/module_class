@@ -1,8 +1,8 @@
+from networkx.generators.small import heawood_graph
 from openai import OpenAI
 import openai
 import streamlit as st
 import time
-
 
 #初始化客户端
 def text_correction(ai_prompt,user_input,api_key):
@@ -18,31 +18,6 @@ def text_correction(ai_prompt,user_input,api_key):
      ], )
     return response.choices[0].message.content
 
-
-def is_openai_api_available(api_key: str) -> bool:
-    """
-    检查 OpenAI API 是否存在并且可用。
-
-    :param api_key: OpenAI API 密钥
-    :return: 如果 API 可用返回 True，否则返回 False
-    """
-    try:
-        # 设置 API 密钥
-        openai.api_key = api_key
-        # 测试调用一个简单的 API 方法，例如模型列表
-        openai.Model.list()
-        # 如果调用成功，返回 True
-        return True
-    except openai.APIError:
-        # 认证失败，可能是密钥错误
-        print("Authentication failed. Please check your API key.")
-        return False
-    except Exception as e:
-        # 捕获其他未知错误
-        print(f"An unexpected error occurred: {e}")
-        return False
-
-
 AI_prompt = """
     请你充当一个文本纠错助手，将所得到的文本进行纠错，分别指出文本中的语法错误，
     拼写错误，标点错误以及对应的修改建议,
@@ -54,7 +29,7 @@ AI_prompt = """
     """
 st.set_page_config(
     page_title="小鸢的文本纠错助手",  # 标签页的名称
-    page_icon="🐲"         # 标签页的图标，可以是 emoji 或 URL🐲"🌟"
+    page_icon="🐲"         # 标签页的图标，可以是 emoji 或 URL🐲"🌟"🚀
 )
 #添加一个标题
 st.title('🌟文本纠错助手')
@@ -62,7 +37,7 @@ st.title('🌟文本纠错助手')
 #添加水平分割线
 st.divider()
 #文本输入
-user_input_content = st.text_area("请输入你需要进行纠错的文本")
+user_input_content = st.text_area("请输入你需要进行纠错的文本",height=100)
 st.divider()
 with st.sidebar:
     st.write("用户管理")
@@ -83,11 +58,8 @@ if st.button("提交",key=num) :
         count+=1
     if user_input_content.strip() and user_api.strip():
         count += 1
-        if is_openai_api_available(user_api):
-            flag = 1
-            st.write("提交成功")
-        else:
-            st.write("api_key 不正确，请重新输入")
+        flag = 1
+        st.write("提交成功")
 else:
     count+=1
 if flag :
@@ -103,6 +75,6 @@ if flag :
         time.sleep(0.01)
     '...现在我们完成了！'
     st.divider()
-    st.text_area("🐲:结果输出",ai_response,height=200)
+    st.text_area("🐲:结果输出",ai_response,height=100)
     flag = 0
 

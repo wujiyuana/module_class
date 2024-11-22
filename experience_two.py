@@ -3,8 +3,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.chat_models import ChatTongyi
 import streamlit as st
 import time
-
-from numpy.core.defchararray import title
+#from numpy.core.defchararray import title
 from pydantic import BaseModel,Field,field_validator
 #from streamlit import chat_message
 
@@ -12,7 +11,7 @@ class Wb(BaseModel):
     title: str=Field(...,description="微博标题")
     important_word: str=Field(...,
                               description="这篇微博的关键词,可以有多个",
-                              examples=["#985大学生#🌟#超长寒假#","#春节#🚀#一票难求#🚀#春运#",
+                              examples=["#大学生#🌟#超长寒假#","#春节#🚀#一票难求#🚀#春运#",
                                         "#中秋节#🌟#超级月亮#",
                                         "#徐克执导的金庸射雕和春节好适配#🐲#武侠是全球华人血脉觉醒的文化密码#"])
     content: str=Field(...,
@@ -26,8 +25,9 @@ parser_instructions = user_output_parser.get_format_instructions()
 #聊天提示词模板
 chat_prompt = ChatPromptTemplate.from_messages(
     [
-        ("system","{parser_instructions}"),
-        ("human","你长年在微博浏览各种帖子，经过多年的观察，你已经发现了撰写微博的套路，现在我高价聘用你做我的微博撰写小助手，你需要根据我给出的主题，写出一篇微博，并且输出的文本会根据用户要求的语言风格调整。主题:{theme}\n语言风格:{style}"),
+        ("system","你长年在微博浏览各种帖子，经过多年的观察，你已经发现了撰写微博的套路，现在我高价聘用你做我的微博撰写小助手，"
+                  "你需要根据我给出的主题，写出一篇微博，并且输出的文本会根据用户要求的语言风格调整。{parser_instructions}"),
+        ("human","主题:{theme}\n语言风格:{style}"),
     ]
 )
 
@@ -135,7 +135,7 @@ if flag:
             latest_iteration.text(f'{i+1}%/100% ')
             bar.progress(i + 1)
             time.sleep(0.01)
-        '小义plus完成这篇微博了！'
+        '小千-plus完成这篇微博了！'
         st.divider()
         st.header(ai_response.title)
         st.write(ai_response.important_word)

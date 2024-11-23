@@ -2,3 +2,4 @@ openai
 langchain
 langchain_community
 dashscope
+langchain_core

@@ -65,7 +65,7 @@ st.set_page_config(
     page_icon="🌟"         # 标签页的图标，可以是 emoji 或 URL🐲"🌟"🚀
 )
 #添加一个标题
-st.title('小鸢心理咨询师')
+st.title('🕊️小鸢心理咨询师')
 
 #添加水平分割线
 st.divider()

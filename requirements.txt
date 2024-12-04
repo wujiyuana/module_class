@@ -3,3 +3,7 @@ langchain
 langchain_community
 dashscope
 langchain_core
+streamlit
+langchain_text_splitters
+pandas
+langchain_experimental

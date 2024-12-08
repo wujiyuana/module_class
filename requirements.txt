@@ -7,7 +7,6 @@ streamlit
 langchain_text_splitters
 pandas
 langchain_experimental
-json
 numpy
 matplotlib
 plotly

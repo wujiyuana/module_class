@@ -107,27 +107,12 @@ def csv_agent(df,query,use_key):
             top_p=1.0,
             temperature=1.0,
             api_key=use_key,
-
         )
         print("ChatTongyi 初始化成功")
     except Exception as e:
         print(f"ChatTongyi 初始化失败: {e}")
         st.write(f"ChatTongyi 初始化失败: {e},请修改对应错误后重新尝试")
         return False
-        #这里不需要
-        # try:
-        #     print("构造 Prompt...")
-        #     prompt_value = chat_prompt.invoke({
-        #         "parser_instructions": parser_instructions,
-        #         "theme": user_theme,
-        #         "style": user_style
-        #     })
-        #     print(f"Prompt 构造成功: {prompt_value}")
-        # except Exception as e:
-        #     print(f"Prompt 构造失败: {e}")
-        #     st.write(f"Prompt 构造失败: {e},请修改对应错误后重新尝试")
-        #     return False
-
     try:
         print("调用 ChatTongyi 模型...")
         agent_executor = create_pandas_dataframe_agent(
@@ -206,7 +191,7 @@ if data:
                     y = df1['o_Values']
                     # 计算相关性系数
                     correlation_coefficient = np.corrcoef(x, y)[0, 1]
-                    #最小二乘法拟合线性模型
+                    #最小二乘法
                     slope,intercept = np.polyfit(x,y,1)
                     #回归方程
                     equation = f'y = {slope:.2f}x + {intercept:.2f}'
@@ -220,11 +205,8 @@ if data:
                     ax.set_ylabel("Y 轴")
                     # 显示图例
                     ax.legend()
-                    # 在 Streamlit 中显示图表
                     st.pyplot(fig)
-                    # 显示回归方程
                     st.write(f"回归方程: {equation}")
-                    # 显示相关性系数
                     st.write(f"相关性系数: {correlation_coefficient:.2f}")
                     if -0.5<correlation_coefficient<0.5:
                         st.write(f"与y线性相关性较弱")
@@ -235,11 +217,9 @@ if data:
                     fig, ax = plt.subplots()
                     ax.scatter(df1['Category'], df1['Values'])
                     x_label,y_label = df1.keys()
-                    # 添加标题和轴标签
                     ax.set_title('散点图')
                     ax.set_xlabel('X 轴')
                     ax.set_ylabel('Y 轴')
-                    # 在Streamlit中显示图表
                     st.plotly_chart(fig)
                 elif 'box' in response_dict_bot:
                     df1 = pd.DataFrame(response_dict_bot['box'])

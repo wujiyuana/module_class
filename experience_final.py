@@ -12,8 +12,11 @@ import streamlit as st
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
 from langchain_community.chat_models.tongyi import ChatTongyi
 # from langchain_experimental.tools import PythonREPLTool
-
+#需要在自己的电脑系统中用这两个字体
+#确保中文能够显示
 plt.rcParams['font.family'] = 'SimHei'
+#正常显示负号
+plt.rcParams['axes.unicode_minus'] = False
 PROMPT_TEMPLATE = """
 你是一个精通CSV文件以及xlsx文件并且能够进行数据分析的数据分析师，
 你需要帮助用户对其上传的csv文件以及xlsx文件进行分析，

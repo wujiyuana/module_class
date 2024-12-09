@@ -11,3 +11,4 @@ numpy
 matplotlib
 plotly
 openpyxl
+tabulate
